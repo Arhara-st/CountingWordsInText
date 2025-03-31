@@ -1,19 +1,19 @@
 package org.example.service.operations;
 
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CountingWordsGeneralMethods {
 
-    private static Map<String, String> textAndCountWords = new HashMap<>();
-    private static int countText = 1;
+    private List<String> textList = new ArrayList<>();
+    private Map<String, String> textAndCountWords = new HashMap<>();
+    private int countText = 1;
+    private Scanner scanner;
+
 
     //подсчет слов в одном тексте
-    public static String countWords(String text){
+    public String countWords(String text){
         Map<String, Integer> wordCount = new HashMap<>();
         String[] words = text.split(" ");
         for (String word : words) {
@@ -27,7 +27,7 @@ public class CountingWordsGeneralMethods {
     }
 
     //подсчет слов во всех текстах
-    public static void countWordsAllText(List<String> textList) {
+    public void countWordsAllText() {
         String textArray[] = textList.toArray(String[]::new);
         String result = Arrays.stream(textArray)
                 .collect(Collectors.joining(" "));
@@ -35,17 +35,47 @@ public class CountingWordsGeneralMethods {
     }
 
     //сохранение текста и частоты слов
-    public static void processSavedTexts(String wordStatistics) {
+    public void processSavedTexts(String wordStatistics) {
         String textNumber = countText + " Текст\n";
         textAndCountWords.put(textNumber, wordStatistics);
         countText++;
     }
 
     //вывод всех текстов и частоты слов
-    public static void printAllTexts() {
+    public void printAllTexts() {
         System.out.println("Все тексты: \n" + textAndCountWords);
     }
 
+    //ввод текста в консоле
+    public String inputTextInConsole() {
+        scanner = new Scanner(System.in);
+        System.out.println("Введите текст: ");
+        return scanner.nextLine();
+    }
+
+    public void initMain() {
+        CountingWordsGeneralMethods counting = new CountingWordsGeneralMethods();
+        scanner  = new Scanner(System.in);
+        while (true) {
+
+            System.out.println("Введите команду:\n");
+            String str = scanner.nextLine();
+            switch (str) {
+                case "stat" -> counting.printAllTexts();
+                case "all" -> counting.countWordsAllText();
+                case "init" -> counting.init();
+                case "exit" -> System.exit(0);
+            }
+
+        }
+    }
+    public void init() {
+        String text = inputTextInConsole();
+        String wordsCount = countWords(text); // анализ и статистика текста
+        System.out.println(wordsCount);
+        textList.add(text);
+        processSavedTexts(wordsCount);
+    }
 
 
 }
