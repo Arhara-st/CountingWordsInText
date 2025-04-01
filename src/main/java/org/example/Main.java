@@ -1,11 +1,11 @@
 package org.example;
 
-import org.example.service.operations.AnotherMethod;
-import org.example.service.operations.CountingWordsGeneralMethods;
+import org.example.service.operations.WordCounter;
 
 public class Main {
     public static void main(String[] args) {
-        AnotherMethod another = new AnotherMethod();
-        another.initMain();
+        WordCounter counter = new WordCounter();
+        counter.initMain();
     }
+
 }
