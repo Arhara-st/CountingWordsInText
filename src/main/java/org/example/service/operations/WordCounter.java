@@ -6,52 +6,54 @@ import java.util.*;
 import java.util.Scanner;
 
 public class WordCounter {
-    private Map<String, Integer> wordCount = new HashMap<>();
-    private Scanner scanner;
+    private final Map<String, Integer> wordToCount = new HashMap<>();
+    private final Scanner scanner = new Scanner(System.in);
 
-
-    //ввод текста в консоле
-    public void init() {
-        scanner = new Scanner(System.in);
+    public void getTextAndUpdateWordCount() {
         System.out.println("Введите текст: ");
         String text = scanner.nextLine();
-        addText(text);
+        addTextInWordToCountMap(text);
         printOneWordStatistics(text);
     }
 
-    public void initMain() {
-        scanner = new Scanner(System.in);
+    public void init() {
         while (true) {
             System.out.println("Введите команду:\n");
             String str = scanner.nextLine();
             switch (str) {
                 case "all" -> printAllStatistics();
-                case "init" -> init();
-                case "exit" -> System.exit(0);
+                case "init" -> getTextAndUpdateWordCount();
+                case "exit" -> {
+                    return;
+                }
             }
         }
     }
 
     public void printAllStatistics() {
-        wordCount.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .forEach(System.out::println);
+        getSortedMap(wordToCount);
     }
 
     public void printOneWordStatistics(String text) {
         Map<String,Integer> wordCountTemp = new HashMap<>();
-        String[] words = text.split(" ");
-        for (String word : words) {
-            wordCountTemp.put(word, wordCountTemp.getOrDefault(word, 0) + 1);
-        }
-        wordCountTemp.entrySet().stream()
+        textToMap(text, wordCountTemp);
+        getSortedMap(wordCountTemp);
+    }
+
+    public void addTextInWordToCountMap(String text) {
+        textToMap(text, wordToCount);
+    }
+
+    public void getSortedMap(Map<String,Integer> map) {
+        map.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .forEach(System.out::println);
     }
-    public void addText(String text) {
+
+    public void textToMap(String text, Map<String,Integer> map) {
         String[] words = text.split(" ");
         for (String word : words) {
-            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
+            map.put(word, map.getOrDefault(word, 0) + 1);
         }
     }
 
